@@ -45,5 +45,4 @@ content = {
 
 updated = requests.put(url, json=content, auth=(
     envs['user'], envs['token'])).json()
-link = updated['_links']['base'] + updated['_links']['webui']
-print(f'Uploaded content successfully to page {link}')
+print('Status Code:', updated.status_code)
