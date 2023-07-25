@@ -1,5 +1,5 @@
 # action.yml
-name: confluence-markdown-sync
+name: confluence-markdown-s
 description: Copy content of a markdown file to a confluence site
 branding:
   icon: upload-cloud
