@@ -46,3 +46,5 @@ content = {
 updated = requests.put(url, json=content, auth=(
     envs['user'], envs['token']))
 print('Status Code:', updated.status_code)
+print('Response Body:', updated.text)
+
