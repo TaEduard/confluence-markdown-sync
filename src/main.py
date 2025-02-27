@@ -9,6 +9,17 @@ from mdx_gfm import GithubFlavoredMarkdownExtension
 
 load_dotenv()
 
+def escape_markdown_content(md_content: str) -> str:
+    escape_mappings = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+    }
+    for char, escape_sequence in escape_mappings.items():
+        md_content = md_content.replace(char, escape_sequence)
+    return md_content
+
+
 workspace = environ.get('GITHUB_WORKSPACE')
 if not workspace:
     print('No workspace is set')
@@ -29,7 +40,11 @@ url = f"https://{envs['cloud']}.atlassian.net/wiki/rest/api/content/{envs['to']}
 
 current = requests.get(url, auth=(envs['user'], envs['token'])).json()
 
-html = markdown(md, extensions=[GithubFlavoredMarkdownExtension()])
+# Escape the markdown content before converting it
+escaped_md = escape_markdown_content(md)
+
+html = markdown(escaped_md, extensions=[GithubFlavoredMarkdownExtension()])
+
 content = {
     'id': current['id'],
     'type': current['type'],
@@ -46,3 +61,5 @@ content = {
 updated = requests.put(url, json=content, auth=(
     envs['user'], envs['token']))
 print('Status Code:', updated.status_code)
+print('Response Body:', updated.text)
+
